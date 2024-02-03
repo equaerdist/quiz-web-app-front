@@ -1,0 +1,34 @@
+.progress {
+  z-index: 0;
+  width: 560px;
+  height: 44px;
+  background: linear-gradient(271deg, #393939 23.01%, #1e1e1e 92.02%);
+  position: absolute;
+  bottom: 80px;
+  left: 78px;
+  border-radius: 30px;
+  &__bar {
+    background: linear-gradient(
+      272deg,
+      #340650 -8.05%,
+      #ec3d82 136.17%,
+      rgba(217, 217, 217, 0) 136.18%
+    );
+
+    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.45) inset,
+      5px 4px 4px 0px rgba(0, 0, 0, 0.45);
+    height: 100%;
+    width: 55%;
+
+    border-radius: 30px;
+  }
+  &__details {
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 700;
+    position: absolute;
+    right: -100px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

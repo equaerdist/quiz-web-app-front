@@ -1,0 +1,69 @@
+.create-card {
+  .wrapper {
+    align-self: center;
+  }
+  &__details {
+    color: var(--form_color);
+    font-size: 24px;
+    line-height: 1.4;
+  }
+  &__answer {
+    &-input {
+      background-color: transparent;
+      border: none;
+      margin-left: 10px;
+    }
+  }
+  &__href {
+    margin-top: 13px;
+    &-button {
+      color: var(--form_color);
+      border: none;
+      display: inline-block;
+      width: auto;
+    }
+  }
+  &__option {
+    color: var(--form_color);
+    margin-left: 17px;
+    text-decoration: underline;
+    line-height: normal;
+  }
+  &__select {
+    margin-left: 17px;
+    text-decoration: underline;
+    color: var(--form_color);
+  }
+  &__answers {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background-color: var(--box_color);
+    padding: 12px 24px;
+    overflow-y: auto;
+    height: 133px;
+    width: 100%;
+    &-input {
+      align-self: center;
+      width: 19px;
+      height: 19px;
+      border-radius: 7px;
+      background-color: rgba(255, 255, 255, 0.45);
+    }
+    &-variant {
+      span {
+        margin-left: 10px;
+        line-height: normal;
+      }
+      span.right {
+        font-weight: 700;
+      }
+      margin-top: 10px;
+      &:first-child {
+        margin-top: 0px;
+      }
+      display: flex;
+    }
+  }
+}
