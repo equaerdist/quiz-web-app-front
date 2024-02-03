@@ -1,0 +1,11 @@
+.title {
+  font-weight: bold;
+  font-size: 38px;
+  &_details {
+    font-size: 18px;
+    font-weight: normal;
+  }
+}
+.black {
+  color: var(--form_color);
+}

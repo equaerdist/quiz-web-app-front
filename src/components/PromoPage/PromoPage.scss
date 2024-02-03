@@ -1,0 +1,31 @@
+.promo {
+  display: grid;
+  grid-template-columns: minmax(500px, 660px) 342px;
+  grid-template-rows: auto;
+  grid-auto-rows: auto;
+  column-gap: 111px;
+  margin-top: 142px;
+  &__title {
+    margin-bottom: 20px;
+  }
+  &__left {
+    align-content: center;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: minmax(200px, 100%);
+    grid-auto-rows: auto;
+  }
+  &__img {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  &__buttons {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(143px, auto));
+    justify-self: start;
+    column-gap: 39px;
+    grid-template-rows: minmax(44px, auto);
+  }
+}

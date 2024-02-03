@@ -1,0 +1,38 @@
+.button {
+  transition: 0.25s all ease-out;
+  display: flex;
+  padding: 15px 35px;
+  color: var(--secondary_color);
+  font-style: normal;
+  font-size: 20px;
+  font-weight: 700;
+  span {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-left: 6px;
+  }
+  &_fixed {
+    max-width: 230px;
+  }
+  &_wide {
+    padding-top: 19px;
+    padding-bottom: 19px;
+  }
+  line-height: normal;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 7px;
+  background-color: var(--primary_color);
+  border: none;
+  box-shadow: 4px 4px 4px 0px var(--shadow_color);
+  &_outlined {
+    border-radius: 7px;
+    border: 1px solid var(--secondary_color);
+    background-color: transparent;
+  }
+  &:hover {
+    transform: scale(1.1);
+  }
+}

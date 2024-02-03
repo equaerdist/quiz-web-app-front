@@ -1,0 +1,35 @@
+.header {
+  margin-top: 39px;
+  &__title {
+    font-size: 48px;
+    font-weight: bold;
+  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  &__nav {
+    display: flex;
+    border-radius: 10px;
+    background: var(--opacity_color);
+    box-shadow: 7px 7px 20px 0px var(--shadow_color);
+    backdrop-filter: blur(5.150000095367432px);
+  }
+  &__link {
+    transition: 0.1s all ease-out;
+    &:hover {
+      transform: scale(1.1);
+    }
+    padding: 15px;
+    padding-inline: 15px;
+    color: var(--secondary_color);
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .first {
+    padding-left: 30px;
+  }
+  .last {
+    padding-right: 30px;
+  }
+}

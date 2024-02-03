@@ -1,0 +1,30 @@
+.user-profile {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  &__name {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+  }
+  &__image {
+    width: 236px;
+    height: 236px;
+    border-radius: 100%;
+    object-fit: cover;
+  }
+  .title_details {
+    margin-top: 15px;
+    color: var(--form_color);
+  }
+  .wrapper {
+    cursor: pointer;
+    margin-top: 15px;
+    display: flex;
+    .title_details {
+      margin-top: 0;
+      margin-left: 15px;
+    }
+  }
+}

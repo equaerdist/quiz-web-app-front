@@ -1,0 +1,31 @@
+.confirm {
+  &__backdrop {
+    width: 700px;
+  }
+  &__details {
+    font-weight: 700;
+    font-size: 20px;
+    text-align: center;
+    color: var(--form_color);
+  }
+  &__buttons {
+    justify-content: center;
+    margin-top: 43px;
+    button {
+      &:nth-child(2) {
+        margin-left: 101px;
+      }
+    }
+    display: flex;
+  }
+  &__cross {
+    position: static;
+    transform: unset;
+    margin-right: 6px;
+    width: 18px;
+    height: 18px;
+    line {
+      stroke-width: 7;
+    }
+  }
+}

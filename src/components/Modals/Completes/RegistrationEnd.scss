@@ -1,0 +1,17 @@
+.registration {
+  &__icon {
+    width: 56px;
+    height: 56px;
+  }
+  &__details {
+    color: var(--form_color);
+    margin-left: 18px;
+    span {
+      color: var(--primary_color);
+      font-weight: 700;
+    }
+  }
+}
+.auth__requirements.wrapper {
+  margin-top: 0px;
+}

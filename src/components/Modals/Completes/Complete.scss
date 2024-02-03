@@ -1,0 +1,13 @@
+.complete {
+  &__icon {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    margin-inline: auto;
+  }
+  &__text {
+    text-align: center;
+    margin-top: 15px;
+  }
+}

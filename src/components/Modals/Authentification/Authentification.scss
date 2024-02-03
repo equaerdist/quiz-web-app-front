@@ -1,0 +1,55 @@
+.auth {
+  &__tabs {
+    display: flex;
+    width: 220px;
+    justify-content: space-between;
+    align-self: center;
+    margin-bottom: 25px;
+  }
+  &__tab {
+    color: var(--primary_color);
+
+    font-size: 20px;
+    font-weight: 900;
+    line-height: normal;
+    text-transform: uppercase;
+    text-decoration: none;
+    position: relative;
+    &::before {
+      position: absolute;
+      width: 85px;
+      height: 5px;
+      bottom: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 10px;
+      background-color: var(--primary_color);
+    }
+    &_active {
+      &::before {
+        content: "";
+      }
+    }
+  }
+  &__requirements {
+    margin-top: 30px;
+    display: flex;
+    align-self: center;
+    justify-content: center;
+  }
+  &__button {
+    margin-top: 30px;
+    margin-inline: auto;
+    display: block;
+    width: auto;
+  }
+  &__details {
+    line-height: normal;
+    margin-left: 10px;
+    width: 210px;
+    color: var(--form_color);
+  }
+  &__href {
+    color: var(--primary_color);
+  }
+}
