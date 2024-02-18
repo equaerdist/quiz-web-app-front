@@ -13,8 +13,17 @@ import {
   fetchForAuthentificationCheck,
   fetchForGetUserData,
 } from "../../slices/auth/auth";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../wrappers/store-hooks";
+import * as signalR from "@microsoft/signalr";
+import config from "../../wrappers/config";
+import {
+  AnswerInfo,
+  GetQuizCardDto,
+  MatchEndsInfo,
+  MatchStartsInfo,
+  Message,
+} from "../../Dtos/quizGame";
 function App() {
   return (
     <Provider store={store}>
@@ -35,8 +44,19 @@ const View = () => {
   useEffect(() => {
     if (authentificated == true) dispatch(fetchForGetUserData());
   }, [authentificated]);
+  const connectionRef = useRef<signalR.HubConnection | null>(null);
   useEffect(() => {
     dispatch(fetchForAuthentificationCheck());
+
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl(`${config}quiz`)
+      .build();
+    connection.on("ReceiveMessage", function (message: Message) {});
+    connection.on("ReceiveQuestion", function (answer: GetQuizCardDto) {});
+    connection.on("ReceiveAnswer", function (info: AnswerInfo) {});
+    connection.on("GameStarts", function (info: MatchStartsInfo) {});
+    connection.on("GameEnds", function (info: MatchEndsInfo) {});
+    connectionRef.current = connection;
   }, []);
   return (
     <>
