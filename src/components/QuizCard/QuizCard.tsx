@@ -7,6 +7,7 @@ import { useAppDispatch } from "../../wrappers/store-hooks";
 import { change } from "../../slices/modal/modal";
 import { useState } from "react";
 import Spinner from "../secondary/Spinner/Spinner";
+import { setSelected } from "../../slices/quiz/quiz";
 
 interface IQuizCardProps {
   title: string;
@@ -15,10 +16,14 @@ interface IQuizCardProps {
   img: string;
   raiting: number;
   completed: number;
+  id: string;
 }
 const QuizCard = (props: IQuizCardProps) => {
   const dispatch = useAppDispatch();
-  const onStart = () => dispatch(change({ current: "chooseRoom" }));
+  const onStart = () => {
+    dispatch(change({ current: "chooseRoom" }));
+    dispatch(setSelected(props.id));
+  };
   const { title, questionsAmount, award, img, raiting, completed } = props;
   const [image, setImage] = useState(img);
   const [loaded, setLoaded] = useState(false);

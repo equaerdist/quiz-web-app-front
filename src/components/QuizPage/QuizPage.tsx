@@ -59,6 +59,7 @@ const QuizPage = () => {
           <QuizCard
             title={item.name}
             key={item.id}
+            id={item.id}
             award={item.award}
             completed={item.completed}
             img={item.thumbnail}

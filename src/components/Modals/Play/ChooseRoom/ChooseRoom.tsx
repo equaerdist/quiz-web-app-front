@@ -4,11 +4,17 @@ import users from "../../../../assets/users.svg";
 import user from "../../../../assets/user.svg";
 import { FC } from "react";
 import { setMode, change } from "../../../../slices/modal/modal";
-import { useAppDispatch } from "../../../../wrappers/store-hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../wrappers/store-hooks";
 import getParent from "../../../../wrappers/getParent";
+import { CompetitiveType, EnterQueueInfo } from "../../../../Dtos/quizGame";
 interface IChooseRoomProps extends IModalProps {}
 const ChooseRoom: FC<IChooseRoomProps> = (props) => {
   const dispatch = useAppDispatch();
+  const connection = useAppSelector((state) => state.global.connection);
+  const currentQuiz = useAppSelector((state) => state.quiz.selected);
   const onModeSetting = (e: React.MouseEvent) => {
     let button: HTMLButtonElement | null = e.target as HTMLButtonElement;
     if (button.nodeName !== "BUTTON")
@@ -18,9 +24,20 @@ const ChooseRoom: FC<IChooseRoomProps> = (props) => {
       if (mode !== null) {
         dispatch(setMode(mode));
         if (mode === "multiple") dispatch(change({ current: "choosePlayers" }));
-        else dispatch(change({ current: "" }));
+        else goSingleGame();
       }
     }
+  };
+  const goSingleGame = () => {
+    if (!connection) return;
+    let info: EnterQueueInfo = {
+      competitiveType: CompetitiveType.Single,
+      quizId: currentQuiz,
+      peopleAmount: 1,
+      withGroup: false,
+    };
+
+    connection.send("GoToQueue", info);
   };
   return (
     <BaseModal onClose={props.onClose}>

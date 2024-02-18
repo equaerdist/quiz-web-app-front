@@ -126,12 +126,17 @@ const initialState = quizAdapter.getInitialState({
   filterValue: 0,
   raiting: true,
   recommendations: true,
+  selected: "",
 });
 
 const quiz = createSlice({
   name: "quiz",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    setSelected(state, action) {
+      state.selected = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getInitialQuizes.pending, (state) => {
@@ -158,4 +163,5 @@ const quiz = createSlice({
       .addDefaultCase(() => {});
   },
 });
+export const { setSelected } = quiz.actions;
 export default quiz.reducer;

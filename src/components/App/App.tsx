@@ -13,10 +13,12 @@ import {
   fetchForAuthentificationCheck,
   fetchForGetUserData,
 } from "../../slices/auth/auth";
-import { useEffect, useRef } from "react";
-import { useAppDispatch, useAppSelector } from "../../wrappers/store-hooks";
+import { setConnection } from "../../slices/global/global";
+import { useEffect } from "react";
 import * as signalR from "@microsoft/signalr";
 import config from "../../wrappers/config";
+import { useAppDispatch, useAppSelector } from "../../wrappers/store-hooks";
+
 import {
   AnswerInfo,
   GetQuizCardDto,
@@ -24,6 +26,7 @@ import {
   MatchStartsInfo,
   Message,
 } from "../../Dtos/quizGame";
+import { goTo } from "../../slices/transition/transition";
 function App() {
   return (
     <Provider store={store}>
@@ -40,23 +43,28 @@ function App() {
 }
 const View = () => {
   const dispatch = useAppDispatch();
+  const callTransition = () => {
+    dispatch(goTo("start"));
+    setTimeout(() => dispatch(goTo("")), 2500);
+  };
   const authentificated = useAppSelector((state) => state.auth.authentificated);
   useEffect(() => {
     if (authentificated == true) dispatch(fetchForGetUserData());
   }, [authentificated]);
-  const connectionRef = useRef<signalR.HubConnection | null>(null);
   useEffect(() => {
     dispatch(fetchForAuthentificationCheck());
-
-    const connection = new signalR.HubConnectionBuilder()
+    let connection = new signalR.HubConnectionBuilder()
       .withUrl(`${config}quiz`)
       .build();
     connection.on("ReceiveMessage", function (message: Message) {});
     connection.on("ReceiveQuestion", function (answer: GetQuizCardDto) {});
     connection.on("ReceiveAnswer", function (info: AnswerInfo) {});
-    connection.on("GameStarts", function (info: MatchStartsInfo) {});
+    connection.on("GameStarts", function (info: MatchStartsInfo) {
+      callTransition();
+    });
     connection.on("GameEnds", function (info: MatchEndsInfo) {});
-    connectionRef.current = connection;
+    connection.start();
+    dispatch(setConnection(connection));
   }, []);
   return (
     <>

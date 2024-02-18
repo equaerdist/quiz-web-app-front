@@ -14,7 +14,6 @@ import { FC } from "react";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 
-import { goTo } from "../../../slices/transition/transition";
 import { mapToQuizDto } from "../../../wrappers/dataTransform";
 
 const schema = yup.object({
@@ -54,10 +53,6 @@ const initialValues: QuizValues = {
 
 const CreateQuiz: FC<ICreateQuizProps> = (props) => {
   const dispatch = useAppDispatch();
-  const callTransition = () => {
-    dispatch(goTo("start"));
-    setTimeout(() => dispatch(goTo("")), 2500);
-  };
   const goToCard = (index: number) => {
     dispatch(
       change({
@@ -74,12 +69,6 @@ const CreateQuiz: FC<ICreateQuizProps> = (props) => {
   return (
     <BaseModal onClose={props.onClose}>
       <Backdrop>
-        <img
-          className="icon modal__back"
-          src={back}
-          alt="Назад"
-          onClick={callTransition}
-        ></img>
         <Formik
           validationSchema={schema}
           initialValues={initialValues}
