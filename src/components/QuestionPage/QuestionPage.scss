@@ -43,6 +43,12 @@
     margin-bottom: 25px;
   }
   &__variant {
+    &_wrong {
+      background-color: red;
+    }
+    &_right {
+      background-color: green;
+    }
     .checkbox {
       margin-top: 3px;
       align-self: start;

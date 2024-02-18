@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import {
+  AnswerInfo,
   CheckAnswerInfo,
   GetQuestionDto,
   GetQuizCardDto,
@@ -17,12 +18,12 @@ import { useEffect, useRef, useState } from "react";
 const QuestionPage = () => {
   const current = useRef<HTMLDivElement | null>(null);
   const connection = useAppSelector((state) => state.global.connection);
-  const dispatch = useAppDispatch();
-  const { id } = useParams();
   const [counter, setCounter] = useState(0);
   const query = useQuery();
+  const { id } = useParams();
   const [currentQuiz, setCurrentQuiz] = useState<GetQuizCardDto | null>(null);
   const [answers, setAnswers] = useState<string[]>([]);
+  const [answerResult, setAnswerResult] = useState<AnswerInfo | null>(null);
   const editAnswer = (type: boolean, id: string) => {
     if (type) setAnswers((answers) => [...answers, id]);
     else setAnswers((answers) => answers.filter((a) => a !== id));
@@ -35,7 +36,14 @@ const QuestionPage = () => {
   }, [counter]);
   const onAnswer = () => {
     var checkAnswerInfo: CheckAnswerInfo = { answers };
-    connection?.invoke("CheckMyQuestion", checkAnswerInfo).then((result) => {});
+    connection?.invoke("CheckMyQuestion", checkAnswerInfo).then((result) => {
+      setAnswerResult(result);
+      setTimeout(() => {
+        if (counter - 1 == amountOfQuestion)
+          connection.invoke("GetInformationAboutQuizCompletion", id);
+        else setCounter((counter) => counter + 1);
+      }, 2000);
+    });
   };
   return (
     <div className="question" ref={current}>
@@ -49,7 +57,11 @@ const QuestionPage = () => {
         <p className="question__general">{currentQuiz?.name}</p>
         <div className="question__variants">
           {currentQuiz?.questions.map((q) => (
-            <Question question={q} EditAnswer={editAnswer}></Question>
+            <Question
+              question={q}
+              EditAnswer={editAnswer}
+              type={answerResult?.rightAnswers.includes(q.id)}
+            ></Question>
           ))}
         </div>
         <button className="button" onClick={onAnswer}>
@@ -63,9 +75,17 @@ const QuestionPage = () => {
 const Question = (props: {
   question: GetQuestionDto;
   EditAnswer: Function;
+  type?: boolean;
 }) => {
+  var className = `question__variant ${
+    props.type
+      ? `question__variant_right`
+      : props.type == false
+      ? "question__variant_wrong"
+      : ""
+  }`;
   return (
-    <div className="question__variant" key={props.question.id}>
+    <div className={className} key={props.question.id}>
       <input
         type="checkbox"
         className="checkbox"

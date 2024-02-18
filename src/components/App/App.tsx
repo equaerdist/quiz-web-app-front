@@ -34,7 +34,9 @@ function App() {
         <div className="layout"></div>
         <div className="app__main">
           <div className="container">
-            <View></View>
+            <Router>
+              <View></View>
+            </Router>
           </div>
         </div>
       </div>
@@ -73,17 +75,18 @@ const View = () => {
     <>
       <ModalManager></ModalManager>
       <TransitionManager></TransitionManager>
-      <Router>
-        <Header></Header>
-        <Routes>
-          <Route path="quizes" element={<QuizPage></QuizPage>}>
-            <Route path=":id" element={<QuestionPage></QuestionPage>}></Route>
-          </Route>
-          <Route path="/" element={<PromoPage></PromoPage>}></Route>
-          <Route path="rate" element={<RaitingPage></RaitingPage>}></Route>
-          <Route path="user" element={<UserArea></UserArea>}></Route>
-        </Routes>
-      </Router>
+
+      <Header></Header>
+      <Routes>
+        <Route path="quizes" element={<QuizPage></QuizPage>}></Route>
+        <Route path="/" element={<PromoPage></PromoPage>}></Route>
+        <Route path="rate" element={<RaitingPage></RaitingPage>}></Route>
+        <Route path="user" element={<UserArea></UserArea>}></Route>
+        <Route
+          path="quizes/:id"
+          element={<QuestionPage></QuestionPage>}
+        ></Route>
+      </Routes>
     </>
   );
 };
