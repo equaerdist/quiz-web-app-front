@@ -1,7 +1,12 @@
 import "./App.scss";
 import PromoPage from "../PromoPage/PromoPage";
 import Header from "../Header/Header";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import QuizPage from "../QuizPage/QuizPage";
 import { Provider } from "react-redux";
 import store from "../../store";
@@ -19,14 +24,9 @@ import * as signalR from "@microsoft/signalr";
 import config from "../../wrappers/config";
 import { useAppDispatch, useAppSelector } from "../../wrappers/store-hooks";
 
-import {
-  AnswerInfo,
-  GetQuizCardDto,
-  MatchEndsInfo,
-  MatchStartsInfo,
-  Message,
-} from "../../Dtos/quizGame";
+import { MatchStartsInfo, Message } from "../../Dtos/quizGame";
 import { goTo } from "../../slices/transition/transition";
+import QuestionPage from "../QuestionPage/QuestionPage";
 function App() {
   return (
     <Provider store={store}>
@@ -42,10 +42,16 @@ function App() {
   );
 }
 const View = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const callTransition = () => {
+  const callTransition = (info: MatchStartsInfo) => {
     dispatch(goTo("start"));
-    setTimeout(() => dispatch(goTo("")), 2500);
+    setTimeout(() => {
+      dispatch(goTo(""));
+      navigate(
+        `quizes/${info.quizId}?amountOfQuestions=${info.amountOfQuestion}`
+      );
+    }, 2500);
   };
   const authentificated = useAppSelector((state) => state.auth.authentificated);
   useEffect(() => {
@@ -54,15 +60,12 @@ const View = () => {
   useEffect(() => {
     dispatch(fetchForAuthentificationCheck());
     let connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${config}quiz`)
+      .withUrl(`${config.api}quizHub`)
       .build();
     connection.on("ReceiveMessage", function (message: Message) {});
-    connection.on("ReceiveQuestion", function (answer: GetQuizCardDto) {});
-    connection.on("ReceiveAnswer", function (info: AnswerInfo) {});
     connection.on("GameStarts", function (info: MatchStartsInfo) {
-      callTransition();
+      callTransition(info);
     });
-    connection.on("GameEnds", function (info: MatchEndsInfo) {});
     connection.start();
     dispatch(setConnection(connection));
   }, []);
@@ -73,7 +76,9 @@ const View = () => {
       <Router>
         <Header></Header>
         <Routes>
-          <Route path="quizes" element={<QuizPage></QuizPage>}></Route>
+          <Route path="quizes" element={<QuizPage></QuizPage>}>
+            <Route path=":id" element={<QuestionPage></QuestionPage>}></Route>
+          </Route>
           <Route path="/" element={<PromoPage></PromoPage>}></Route>
           <Route path="rate" element={<RaitingPage></RaitingPage>}></Route>
           <Route path="user" element={<UserArea></UserArea>}></Route>

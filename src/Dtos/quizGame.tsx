@@ -18,6 +18,7 @@ export interface GetQuizCardDto {
   name: string;
   thumbnail: string;
   questions: GetQuestionDto[];
+  award: number;
 }
 
 export interface GetQuestionDto {
@@ -37,6 +38,7 @@ export interface MatchStartsInfo {
   users: string[];
   quizId: string;
   competitiveType: CompetitiveType;
+  amountOfQuestion: number;
 }
 
 export enum CompetitiveType {

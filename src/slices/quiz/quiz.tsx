@@ -9,6 +9,7 @@ import { AxiosError } from "axios";
 import config from "../../wrappers/config";
 import { RootState } from "../../store";
 import { transformQuizes } from "../../wrappers/dataTransform";
+import { GetQuizCardDto } from "../../Dtos/quizGame";
 
 const quizAdapter = createEntityAdapter({
   selectId: (quiz: GetQuizDto) => quiz.id,
@@ -115,7 +116,6 @@ export const onPagedQuizes = createAsyncThunk(
 export const { selectAll } = quizAdapter.getSelectors(
   (state: RootState) => state.quiz
 );
-
 const initialState = quizAdapter.getInitialState({
   loading: "idle",
   page: 1,
