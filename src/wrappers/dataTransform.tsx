@@ -3,6 +3,7 @@ import {
   CreateQuizCardQuestionDto,
   CreateQuizDto,
   GetQuizDto,
+  GetUserDto,
 } from "../Dtos/Quiz";
 import { AnswerValues } from "../components/Modals/AnswerEditor/AnswerEditor";
 import { CardValues } from "../components/Modals/CreateCard/CreateCard";
@@ -10,7 +11,7 @@ import { QuizValues } from "../components/Modals/CreateQuiz/CreateQuiz";
 import config from "./config";
 
 export const getItemFromStorage = (item: string) => {
-  console.log("start get item");
+  console.log("start get item   ", item);
   let data = sessionStorage.getItem(`formik.form.${item}`);
   if (data) {
     console.log("get item", item);
@@ -42,12 +43,19 @@ export const mapToCardDto = (c: CardValues) => {
 };
 export const mapToQuizDto = (q: QuizValues) => {
   console.log("start mapping quiz");
+  let cardsSamples = q.cards;
   let dto: CreateQuizDto = {
     name: q.title,
     award: parseInt(q.award),
     cards: q.cards
       .map(getItemFromStorage)
       .map((item) => item.values)
+      .map((item, i) => {
+        item.answers = item.answers.map(
+          (answer: string) => `${cardsSamples[i]}.${answer}`
+        );
+        return item;
+      })
       .map(mapToCardDto),
     thumbnail: q.cover,
     mode: 0,
@@ -59,4 +67,8 @@ export const mapToQuizDto = (q: QuizValues) => {
 export const transformQuizes = (q: GetQuizDto) => {
   q.thumbnail = `${config.api}image/${q.thumbnail}`;
   return q;
+};
+export const transformGetUserDto = (user: GetUserDto) => {
+  user.thumbnail = `${config.api}image/${user.thumbnail}`;
+  return user;
 };

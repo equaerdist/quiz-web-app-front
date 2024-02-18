@@ -1,7 +1,7 @@
 import question from "../../assets/question.svg";
 import play from "../../assets/play.svg";
 import plus from "../../assets/plus.svg";
-import { useAppDispatch } from "../../wrappers/store-hooks";
+import { useAppDispatch, useAppSelector } from "../../wrappers/store-hooks";
 import { change } from "../../slices/modal/modal";
 import { useNavigate } from "react-router-dom";
 const PromoPage = () => {
@@ -9,6 +9,8 @@ const PromoPage = () => {
   const dispatch = useAppDispatch();
   const onQuizCreate = () => dispatch(change({ current: "createQuiz" }));
   const onStart = () => navigate("/quizes");
+  const authentificated = useAppSelector((state) => state.auth.authentificated);
+  const onRegister = () => dispatch(change({ current: "authentification" }));
   return (
     <div className="promo">
       <div className="promo__left">
@@ -26,7 +28,10 @@ const PromoPage = () => {
             <img src={play} alt="иконка старта" className="icon" />
             Начать
           </button>
-          <button className="button button_outlined" onClick={onQuizCreate}>
+          <button
+            className="button button_outlined"
+            onClick={authentificated ? onQuizCreate : onRegister}
+          >
             <img src={plus} alt="иконка плюсика" className="icon" />
             Создать свой квиз
           </button>

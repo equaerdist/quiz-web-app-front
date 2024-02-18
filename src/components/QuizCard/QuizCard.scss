@@ -54,6 +54,10 @@
   }
   &__raiting,
   &__stat {
+    &-numbers {
+      display: flex;
+      align-content: center;
+    }
     .icon {
       margin: 0;
     }

@@ -8,7 +8,13 @@ import store from "../../store";
 import RaitingPage from "../RaitingPage/RaitingPage";
 import ModalManager from "../ModalManager/ModalManager";
 import TransitionManager from "../Transitions/TransitionManager";
-
+import UserArea from "../UserArea/UserArea";
+import {
+  fetchForAuthentificationCheck,
+  fetchForGetUserData,
+} from "../../slices/auth/auth";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../wrappers/store-hooks";
 function App() {
   return (
     <Provider store={store}>
@@ -16,24 +22,36 @@ function App() {
         <div className="layout"></div>
         <div className="app__main">
           <div className="container">
-            <ModalManager></ModalManager>
-            <TransitionManager></TransitionManager>
-            <Router>
-              <Header></Header>
-              <Routes>
-                <Route path="quizes" element={<QuizPage></QuizPage>}></Route>
-                <Route path="/" element={<PromoPage></PromoPage>}></Route>
-                <Route
-                  path="rate"
-                  element={<RaitingPage></RaitingPage>}
-                ></Route>
-              </Routes>
-            </Router>
+            <View></View>
           </div>
         </div>
       </div>
     </Provider>
   );
 }
-
+const View = () => {
+  const dispatch = useAppDispatch();
+  const authentificated = useAppSelector((state) => state.auth.authentificated);
+  useEffect(() => {
+    if (authentificated == true) dispatch(fetchForGetUserData());
+  }, [authentificated]);
+  useEffect(() => {
+    dispatch(fetchForAuthentificationCheck());
+  }, []);
+  return (
+    <>
+      <ModalManager></ModalManager>
+      <TransitionManager></TransitionManager>
+      <Router>
+        <Header></Header>
+        <Routes>
+          <Route path="quizes" element={<QuizPage></QuizPage>}></Route>
+          <Route path="/" element={<PromoPage></PromoPage>}></Route>
+          <Route path="rate" element={<RaitingPage></RaitingPage>}></Route>
+          <Route path="user" element={<UserArea></UserArea>}></Route>
+        </Routes>
+      </Router>
+    </>
+  );
+};
 export default App;

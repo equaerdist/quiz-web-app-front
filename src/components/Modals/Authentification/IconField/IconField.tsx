@@ -8,6 +8,7 @@ interface IIconFieldProps {
   alt?: string;
   type?: string;
   name: string;
+  autocomplete?: string;
 }
 
 const IconField: FC<IIconFieldProps> = (props) => {
@@ -21,6 +22,7 @@ const IconField: FC<IIconFieldProps> = (props) => {
         </label>
         {children ?? (
           <input
+            autoComplete={props.autocomplete}
             {...field}
             type={type ?? "text"}
             className="input"

@@ -1,4 +1,14 @@
 .header {
+  .wrapper {
+    display: flex;
+    align-items: center;
+    .button {
+      margin-right: 25px;
+    }
+  }
+  &__left {
+    cursor: pointer;
+  }
   margin-top: 39px;
   &__title {
     font-size: 48px;

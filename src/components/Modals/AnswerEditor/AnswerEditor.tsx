@@ -55,7 +55,7 @@ const AnswerEditor: FC<IAnswerEditorProps> = (answerProps) => {
         ></img>
         <Formik
           initialValues={initialValues}
-          onSubmit={() => {}}
+          onSubmit={(values) => {}}
           validationSchema={schema}
         >
           {(props) => (

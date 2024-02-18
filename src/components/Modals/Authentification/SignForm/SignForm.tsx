@@ -5,7 +5,21 @@ import link from "../../../../assets/external-link.svg";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import FormikPersist from "../../FormikPersistence/FormikPersistence";
-const initialValues = { email: "", password: "", accept: false };
+import { useAppDispatch } from "../../../../wrappers/store-hooks";
+import { fetchForUserRegistration } from "../../../../slices/auth/auth";
+import { UserDto } from "../../../../Dtos/Quiz";
+type SignFormValues = {
+  email: string;
+  password: string;
+  repassword: string;
+  accept: boolean;
+};
+const initialValues: SignFormValues = {
+  email: "",
+  password: "",
+  accept: false,
+  repassword: "",
+};
 const schema = yup.object({
   email: yup
     .string()
@@ -19,12 +33,25 @@ const schema = yup.object({
     .boolean()
     .isTrue("Прочтите условия пользования")
     .required("Поле является обязательным"),
+  repassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Пароли не совпадают")
+    .required("Поле является обязательным"),
 });
 const SignForm = () => {
+  const dispatch = useAppDispatch();
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={() => {}}
+      onSubmit={(values, { setSubmitting }) => {
+        let userDto: UserDto = {
+          login: values.email,
+          password: values.password,
+        };
+        dispatch(fetchForUserRegistration(userDto)).then(() =>
+          setSubmitting(false)
+        );
+      }}
       validationSchema={schema}
     >
       {(props) => (
@@ -33,18 +60,24 @@ const SignForm = () => {
           <IconField
             name="email"
             id="email"
+            type="email"
             placeholder="Email"
+            autocomplete="email"
             icon={dog}
           ></IconField>
           <IconField
             name="password"
             id="password"
             placeholder="Пароль"
+            autocomplete="new-password"
+            type="password"
             icon={lock}
           ></IconField>
           <IconField
             name="repassword"
             id="repassword"
+            type="password"
+            autocomplete="new-password"
             placeholder="Повторите пароль"
             icon={lock}
           ></IconField>
@@ -67,7 +100,7 @@ const SignForm = () => {
           {props.errors.accept && props.touched.accept ? (
             <div className="error">{props.errors.accept}</div>
           ) : null}
-          <button className="button auth__button">
+          <button className="button auth__button" disabled={props.isSubmitting}>
             <img src={link} alt="иконка" className="icon" />
             <span>Регистрация</span>
           </button>

@@ -23,6 +23,7 @@ export const createQuizAsync = createAsyncThunk(
       const response = await axios.post(`${config.api}quiz`, data, {
         headers: { "Content-Type": "application/json" },
         cancelToken: token.token,
+        withCredentials: true,
       });
       return response.data;
     } catch (error) {
@@ -138,6 +139,7 @@ const quiz = createSlice({
       })
       .addCase(getInitialQuizes.fulfilled, (state, action) => {
         quizAdapter.setMany(state, action.payload);
+        state.loading = "idle";
       })
       .addCase(getInitialQuizes.rejected, (state, action) => {
         state.loading = "Произошла ошибка";
@@ -145,11 +147,13 @@ const quiz = createSlice({
           let responseError = action.payload as ProblemDetails;
           state.loading = getErrorFromResponse(responseError);
         } else {
-          if (action.error.message) state.loading = action.error.message;
+          if (action.meta.aborted) state.loading = "idle";
+          else if (action.error.message) state.loading = action.error.message;
         }
       })
       .addCase(onPagedQuizes.fulfilled, (state, action) => {
         quizAdapter.addMany(state, action.payload);
+        state.loading = "idle";
       })
       .addDefaultCase(() => {});
   },

@@ -1,8 +1,9 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import config from "../../wrappers/config";
-import { CreateQuizDto, ProblemDetails } from "../../Dtos/Quiz";
+import { ProblemDetails } from "../../Dtos/Quiz";
 import { createQuizAsync, getErrorFromResponse } from "../quiz/quiz";
+import { fetchForUserEnter, fetchForUserRegistration } from "../auth/auth";
 
 type modalState = {
   current: string;
@@ -15,7 +16,7 @@ type modalState = {
   details: string;
 };
 const initialState: modalState = {
-  current: "createQuiz",
+  current: "",
   mode: "single",
   playersAmount: 2,
   transferData: "Ошибка",
@@ -93,6 +94,40 @@ const slice = createSlice({
       })
       .addCase(createQuizAsync.pending, (state) => {
         state.condition = "loading";
+      })
+      .addCase(fetchForUserRegistration.pending, (state) => {
+        state.condition = "loading";
+      })
+      .addCase(fetchForUserRegistration.rejected, (state, action) => {
+        state.condition = "error";
+        state.current = "complete";
+        state.transferData = "Что-то пошло не так..";
+        if (action.payload) {
+          let responseError = action.payload as ProblemDetails;
+          state.details = getErrorFromResponse(responseError);
+        } else state.details = action.error.message ?? "Попробуйте снова";
+      })
+      .addCase(fetchForUserRegistration.fulfilled, (state, action) => {
+        state.condition = "idle";
+        state.current = "complete";
+        state.transferData = "Поздравляем! Регистрация прошла успешно.";
+        state.details = action.payload;
+      })
+      .addCase(fetchForUserEnter.pending, (state) => {
+        state.condition = "loading";
+      })
+      .addCase(fetchForUserEnter.fulfilled, (state) => {
+        state.current = "";
+        state.condition = "idle";
+      })
+      .addCase(fetchForUserEnter.rejected, (state, action) => {
+        state.condition = "error";
+        state.current = "complete";
+        state.transferData = "Что-то пошло не так..";
+        if (action.payload) {
+          let responseError = action.payload as ProblemDetails;
+          state.details = getErrorFromResponse(responseError);
+        } else state.details = action.error.message ?? "Попробуйте снова";
       })
 
       .addDefaultCase(() => {});

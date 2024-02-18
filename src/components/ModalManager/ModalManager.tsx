@@ -21,9 +21,9 @@ const ModalManager = () => {
     dispatch(change({ current: "" }));
     dispatch(setCondition("idle"));
   };
+  if (condition === "loading") return <Loading></Loading>;
   return (
     <>
-      {condition === "loading" ? <Loading></Loading> : null}
       {current === "chat" ? <Chat onClose={onClose}></Chat> : null}
       {current === "choosePlayers" ? (
         <ChoosePlayers onClose={onClose}></ChoosePlayers>

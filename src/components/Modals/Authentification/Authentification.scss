@@ -33,9 +33,7 @@
   }
   &__requirements {
     margin-top: 30px;
-    display: flex;
-    align-self: center;
-    justify-content: center;
+    display: block;
   }
   &__button {
     margin-top: 30px;
@@ -46,7 +44,7 @@
   &__details {
     line-height: normal;
     margin-left: 10px;
-    width: 210px;
+
     color: var(--form_color);
   }
   &__href {

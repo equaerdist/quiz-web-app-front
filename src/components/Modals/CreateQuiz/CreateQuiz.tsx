@@ -66,9 +66,10 @@ const CreateQuiz: FC<ICreateQuizProps> = (props) => {
       })
     );
   };
-  const onSubmit = (values: QuizValues) => {
+  const handleSubmit = (values: QuizValues) => {
+    console.log("he");
     let dto = mapToQuizDto(values);
-    dispatch(createQuizAsync(dto)).unwrap().then(console.log);
+    return dispatch(createQuizAsync(dto)).unwrap();
   };
   return (
     <BaseModal onClose={props.onClose}>
@@ -82,7 +83,7 @@ const CreateQuiz: FC<ICreateQuizProps> = (props) => {
         <Formik
           validationSchema={schema}
           initialValues={initialValues}
-          onSubmit={(values) => onSubmit(values)}
+          onSubmit={(values) => handleSubmit(values)}
         >
           {(props) => (
             <Form className="form">
@@ -140,7 +141,7 @@ const CreateQuiz: FC<ICreateQuizProps> = (props) => {
               </div>
               <FormControls
                 onReset={() => {
-                  props.resetForm;
+                  props.resetForm();
                   sessionStorage.clear();
                 }}
                 inputName="cover"

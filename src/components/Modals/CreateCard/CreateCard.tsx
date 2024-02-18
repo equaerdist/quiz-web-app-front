@@ -27,12 +27,6 @@ const initialValues: CardValues = {
 
 const schema = yup.object({
   question_name: yup.string().required("Поле является обязательным").max(255),
-  answers: yup.array().of(
-    yup.object().shape({
-      content: yup.string().required().max(255),
-      type: yup.boolean(),
-    })
-  ),
 });
 
 interface ICreateCard extends IModalProps {
@@ -47,7 +41,7 @@ const CreateCard: FC<ICreateCard> = (cardProps) => {
     dispatch(
       change({
         current: "createAnswer",
-        sessionData: `${cardProps.name}createAnswer${index}`,
+        sessionData: `${cardProps.name}.createAnswer${index}`,
         backPath: cardProps.name,
       })
     );

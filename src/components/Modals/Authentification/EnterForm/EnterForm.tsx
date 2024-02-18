@@ -5,7 +5,14 @@ import enter from "../../../../assets/log-in.svg";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import FormikPersist from "../../FormikPersistence/FormikPersistence";
-const initialValues = {
+import { UserDto } from "../../../../Dtos/Quiz";
+import { useAppDispatch } from "../../../../wrappers/store-hooks";
+import { fetchForUserEnter } from "../../../../slices/auth/auth";
+type enterFormValues = {
+  enter_login: string;
+  enter_password: string;
+};
+const initialValues: enterFormValues = {
   enter_login: "",
   enter_password: "",
 };
@@ -17,10 +24,17 @@ const schema = yup.object({
   enter_password: yup.string().required("Поле является обязательным"),
 });
 const EnterForm = () => {
+  const dispatch = useAppDispatch();
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={() => {}}
+      onSubmit={(values: enterFormValues) => {
+        let userDto: UserDto = {
+          login: values.enter_login,
+          password: values.enter_password,
+        };
+        return dispatch(fetchForUserEnter(userDto));
+      }}
       validationSchema={schema}
     >
       {() => (
@@ -29,13 +43,17 @@ const EnterForm = () => {
           <IconField
             id="enter_login"
             icon={dog}
+            type="email"
             placeholder="Email"
+            autocomplete="email"
             name="enter_login"
           ></IconField>
           <IconField
             name="enter_password"
             id="enter__password"
+            autocomplete="current-password"
             icon={lock}
+            type="password"
             placeholder="Пароль"
           ></IconField>
           <button className="button auth__button">

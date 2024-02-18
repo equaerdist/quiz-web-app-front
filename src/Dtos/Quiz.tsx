@@ -41,3 +41,17 @@ export interface ProblemDetails {
   detail: string;
   errors?: Error[];
 }
+
+export interface GetUserDto {
+  id: string;
+  login: string;
+  type: UserType;
+  thumbnail: string;
+  createdAt: string;
+  accepted: boolean;
+}
+
+export enum UserType {
+  Default = 0,
+  Premium = 1,
+}
