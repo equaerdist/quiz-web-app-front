@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../wrappers/store-hooks";
 import { change, setCondition } from "../../slices/modal/modal";
 import Complete from "../Modals/Completes/Complete";
 import Loading from "../Modals/Completes/Loading/Loading";
+import MatchEnd from "../Modals/MatchEnd/MatchEnd";
 const ModalManager = () => {
   const current = useAppSelector((state) => state.modal.current);
   const transferData = useAppSelector((STATE) => STATE.modal.transferData);
@@ -54,6 +55,7 @@ const ModalManager = () => {
         <CreateCard name={transferData} onClose={onClose}></CreateCard>
       ) : null}
       {current === "complete" ? <Complete onClose={onClose}></Complete> : null}
+      {current === "matchEnd" ? <MatchEnd onClose={onClose}></MatchEnd> : null}
     </>
   );
 };

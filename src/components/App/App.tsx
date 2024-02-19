@@ -27,6 +27,8 @@ import { useAppDispatch, useAppSelector } from "../../wrappers/store-hooks";
 import { MatchStartsInfo, Message } from "../../Dtos/quizGame";
 import { goTo } from "../../slices/transition/transition";
 import QuestionPage from "../QuestionPage/QuestionPage";
+import { change } from "../../slices/modal/modal";
+import MatchEnd from "../Modals/MatchEnd/MatchEnd";
 function App() {
   return (
     <Provider store={store}>
@@ -48,6 +50,7 @@ const View = () => {
   const dispatch = useAppDispatch();
   const callTransition = (info: MatchStartsInfo) => {
     dispatch(goTo("start"));
+    dispatch(change({ current: "" }));
     setTimeout(() => {
       dispatch(goTo(""));
       navigate(

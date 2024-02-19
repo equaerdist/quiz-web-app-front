@@ -1,11 +1,13 @@
 import Portal from "../../Modals/Portal/Portal";
-import "./ProgressBar.scss";
-const ProgressBar = () => {
+const ProgressBar = (props: { value: number }) => {
   return (
     <Portal>
-      <div className="progress">
-        <div className="progress__bar"></div>
-        <p className="progress__details">67%</p>
+      <div className="progress progress_quiz">
+        <div
+          className="progress__bar"
+          style={{ width: `${props.value}%` }}
+        ></div>
+        <p className="progress__details">{props.value}%</p>
       </div>
     </Portal>
   );

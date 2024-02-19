@@ -1,6 +1,7 @@
 .button {
   transition: 0.25s all ease-out;
   display: flex;
+  cursor: pointer;
   padding: 15px 35px;
   color: var(--secondary_color);
   font-style: normal;

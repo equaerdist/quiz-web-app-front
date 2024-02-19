@@ -23,6 +23,7 @@
 @import url("../components/Modals/Completes/Confirm/Confirm.scss");
 @import url("../components/QuestionPage/QuestionPage.scss");
 @import url("../components//Modals/Completes/Complete.scss");
+@import url("../components/secondary/ProgressBar/ProgressBar.scss");
 
 * {
   font-family: "Roboto", sans-serif;
