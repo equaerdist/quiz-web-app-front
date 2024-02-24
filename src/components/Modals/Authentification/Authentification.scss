@@ -2,8 +2,11 @@
   &__tabs {
     display: flex;
     width: 220px;
-    justify-content: space-between;
+    justify-content: center;
+    row-gap: 25px;
+    column-gap: 30px;
     align-self: center;
+    flex-wrap: wrap;
     margin-bottom: 25px;
   }
   &__tab {
@@ -49,5 +52,23 @@
   }
   &__href {
     color: var(--primary_color);
+  }
+}
+@media (max-width: 576px) {
+  .auth {
+    &__button {
+      flex-direction: column;
+      font-size: 16px;
+      padding-inline: 10px;
+    }
+    &__requirements {
+      flex-direction: column;
+      span,
+      .href {
+        text-wrap: wrap;
+        text-align: center;
+        font-size: 14px;
+      }
+    }
   }
 }

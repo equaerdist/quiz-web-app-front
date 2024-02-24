@@ -1,14 +1,8 @@
-import React from "react";
-import Portal from "../../Modals/Portal/Portal";
 import "./QuitQuiz.scss";
 interface IQuitQuizProps {
-  question: HTMLElement;
+  onCancel?: () => void;
 }
-const QuitQuiz: React.FC<IQuitQuizProps> = (props) => {
-  return (
-    <Portal destination={props.question}>
-      <div className="quit-quiz"></div>
-    </Portal>
-  );
+const QuitQuiz = () => {
+  return <div className="quit-quiz"></div>;
 };
 export default QuitQuiz;

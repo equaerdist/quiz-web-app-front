@@ -84,8 +84,9 @@ const QuestionPage = () => {
   return (
     <div className="question" ref={current}>
       <ProgressBar value={progress}></ProgressBar>
-      <QuitQuiz question={current.current as HTMLElement}></QuitQuiz>
+
       <div className="question__header">
+        <QuitQuiz></QuitQuiz>
         <img src={rectangle} alt="обложка" className="question__cover" />
         <p className="question__score">{currentQuiz?.award}</p>
       </div>

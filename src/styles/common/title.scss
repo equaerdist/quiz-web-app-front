@@ -9,3 +9,19 @@
 .black {
   color: var(--form_color);
 }
+@media (max-width: 780px) {
+  .title {
+    font-size: 30px;
+    &_details {
+      font-size: 16px;
+    }
+  }
+}
+@media (max-width: 576px) {
+  .title {
+    font-size: 24px;
+    &_details {
+      font-size: 14px;
+    }
+  }
+}

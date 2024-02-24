@@ -9,6 +9,7 @@
   &__header {
     margin-bottom: 24px;
     display: flex;
+    align-items: center;
     justify-content: center;
   }
   &__cover {
@@ -67,6 +68,17 @@
     margin-left: 15px;
     &_picked {
       font-weight: 700;
+    }
+  }
+}
+@media (max-width: 576px) {
+  .question {
+    &__score {
+      margin-top: 25px;
+      margin-inline: auto;
+    }
+    &__header {
+      flex-direction: column;
     }
   }
 }

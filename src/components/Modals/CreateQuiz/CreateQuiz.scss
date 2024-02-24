@@ -5,7 +5,7 @@
   }
   &__cards {
     display: flex;
-
+    flex-wrap: wrap;
     padding: 16px;
     overflow-x: auto;
     &-item {
@@ -26,6 +26,16 @@
       &:first-child {
         margin-left: 0;
       }
+    }
+  }
+}
+@media (max-width: 650px) {
+  .create__cards {
+    row-gap: 15px;
+    justify-content: center;
+    column-gap: 15px;
+    &-item {
+      margin-left: 0px;
     }
   }
 }

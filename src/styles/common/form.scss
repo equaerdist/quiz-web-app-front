@@ -85,6 +85,7 @@
   display: block;
   color: red;
   margin-top: 10px;
+  text-align: center;
 }
 input.hidden {
   opacity: 0;
@@ -96,4 +97,55 @@ input.hidden {
   width: 45px;
   height: 45px;
   color: var(--form_color);
+}
+@media (max-width: 650px) {
+  .form {
+    .input {
+      font-size: 16px;
+    }
+    .create__cards.wrapper {
+      flex-direction: row;
+      justify-content: center;
+    }
+    .wrapper {
+      &_checkbox {
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-direction: row;
+      }
+      flex-direction: column;
+      .button {
+        row-gap: 10px;
+        .icon {
+          margin-inline: auto;
+        }
+        span {
+          text-wrap: wrap;
+          font-size: 16px;
+          margin-inline: auto;
+        }
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .create__href {
+        margin-top: 25px;
+        margin-left: 0px;
+      }
+    }
+  }
+}
+@media (max-width: 433px) {
+  .form {
+    .href {
+      text-align: center;
+    }
+    .wrapper_checkbox {
+      align-items: center;
+      flex-direction: column;
+      .label {
+        margin-left: 0px;
+      }
+    }
+  }
 }

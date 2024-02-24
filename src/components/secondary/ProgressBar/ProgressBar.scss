@@ -32,3 +32,22 @@
     transform: translateY(-50%);
   }
 }
+@media (max-width: 780px) {
+  .progress-quiz {
+    width: 70%;
+    left: 50%;
+    transform: translateX(-60%);
+    &__details {
+      right: -73px;
+    }
+  }
+}
+@media (max-width: 576px) {
+  .progress-quiz {
+    transform: translateX(-50%);
+    width: 90%;
+    &__details {
+      display: none;
+    }
+  }
+}

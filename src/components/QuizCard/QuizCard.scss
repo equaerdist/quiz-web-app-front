@@ -92,3 +92,9 @@
     padding: 25px 20px;
   }
 }
+@media (max-width: 340px) {
+  .card {
+    width: 94%;
+    padding-inline: 10px;
+  }
+}
