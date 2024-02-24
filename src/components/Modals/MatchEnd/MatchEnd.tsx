@@ -8,12 +8,18 @@ import { useAppSelector } from "../../../wrappers/store-hooks";
 import "./MatchEnd.scss";
 import { MatchEndsInfo } from "../../../Dtos/quizGame";
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 const MatchEnd = (props: { onClose: () => void }) => {
   const sessionData = useAppSelector((state) => state.modal.transferData);
   const matchInfo: MatchEndsInfo = useMemo(
     () => JSON.parse(sessionData) as MatchEndsInfo,
     [sessionData]
   );
+  const navigate = useNavigate();
+  const onAccept = () => {
+    props.onClose();
+    navigate("quizes");
+  };
   return (
     <BaseModal onClose={props.onClose}>
       <Backdrop>
@@ -39,7 +45,7 @@ const MatchEnd = (props: { onClose: () => void }) => {
               </div>
             </li>
           </ul>
-          <button className="button match-end__button" onClick={props.onClose}>
+          <button className="button match-end__button" onClick={onAccept}>
             <img src={simple_check} className="icon" />
             <span>Окей</span>
           </button>

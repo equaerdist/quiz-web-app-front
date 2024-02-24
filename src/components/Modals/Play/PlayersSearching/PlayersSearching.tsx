@@ -10,7 +10,7 @@ const PlayersSearching: FC<IPlayersSearching> = (props) => {
     <Portal>
       <Backdrop classNames="players-search__backdrop">
         <div className="wrapper" onClick={props.onClose}>
-          <Spinner></Spinner>
+          <Spinner classNames="spinner_white"></Spinner>
           <Cross></Cross>
         </div>
         <p className="title_details players-search__details">Поиск игроков</p>

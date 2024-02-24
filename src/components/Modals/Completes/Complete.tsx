@@ -4,9 +4,11 @@ import cross from "../../../assets/cross3d.png";
 import checker from "../../../assets/check3d.png";
 
 import { useAppSelector } from "../../../wrappers/store-hooks";
+import { ReactNode } from "react";
 
 interface ICompleteProps {
   onClose: () => void;
+  buttons?: ReactNode[];
 }
 
 const Complete = (props: ICompleteProps) => {
@@ -24,6 +26,7 @@ const Complete = (props: ICompleteProps) => {
         {details === "" ? null : (
           <p className="title_details black complete__text">{details}</p>
         )}
+        <div className="buttons">{props.buttons ? props.buttons : null}</div>
       </Backdrop>
     </BaseModal>
   );

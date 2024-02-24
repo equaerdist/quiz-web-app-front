@@ -12,15 +12,27 @@ import { change, setCondition } from "../../slices/modal/modal";
 import Complete from "../Modals/Completes/Complete";
 import Loading from "../Modals/Completes/Loading/Loading";
 import MatchEnd from "../Modals/MatchEnd/MatchEnd";
+import PlayersSearching from "../Modals/Play/PlayersSearching/PlayersSearching";
 const ModalManager = () => {
   const current = useAppSelector((state) => state.modal.current);
   const transferData = useAppSelector((STATE) => STATE.modal.transferData);
   const backPath = useAppSelector((state) => state.modal.backPath);
   const condition = useAppSelector((state) => state.modal.condition);
+  const connection = useAppSelector((state) => state.global.connection);
   const dispatch = useAppDispatch();
   const onClose = () => {
-    dispatch(change({ current: "" }));
+    dispatch(
+      change({
+        current: "",
+        sessionData: "",
+        backPath: "",
+      })
+    );
     dispatch(setCondition("idle"));
+  };
+  const onMatchCancel = () => {
+    onClose();
+    connection?.send("CancelQueue");
   };
   if (condition === "loading") return <Loading></Loading>;
   return (
@@ -56,6 +68,9 @@ const ModalManager = () => {
       ) : null}
       {current === "complete" ? <Complete onClose={onClose}></Complete> : null}
       {current === "matchEnd" ? <MatchEnd onClose={onClose}></MatchEnd> : null}
+      {current === "playersSearching" ? (
+        <PlayersSearching onClose={onMatchCancel}></PlayersSearching>
+      ) : null}
     </>
   );
 };

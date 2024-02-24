@@ -4,9 +4,13 @@ import { FC } from "react";
 import { useAppDispatch } from "../../../../wrappers/store-hooks";
 import { setPlayersAmount, change } from "../../../../slices/modal/modal";
 import getParent from "../../../../wrappers/getParent";
+import { useAppSelector } from "../../../../wrappers/store-hooks";
+import { CompetitiveType, EnterQueueInfo } from "../../../../Dtos/quizGame";
 interface IChoosePlayersProps extends IModalProps {}
 const ChoosePlayers: FC<IChoosePlayersProps> = (props) => {
   const dispatch = useAppDispatch();
+  const connection = useAppSelector((state) => state.global.connection);
+  const selectedQuiz = useAppSelector((state) => state.quiz.selected);
   const onPlayersSet = (e: React.MouseEvent) => {
     let button = e.target as HTMLButtonElement;
     if (button.nodeName !== "BUTTON")
@@ -14,8 +18,19 @@ const ChoosePlayers: FC<IChoosePlayersProps> = (props) => {
     if (button === null) return;
     let mode = button.getAttribute("data-amount");
     if (mode === null) return;
-    dispatch(setPlayersAmount(parseInt(mode)));
-    dispatch(change({ current: "" }));
+    let peopleAmount = parseInt(mode);
+    dispatch(setPlayersAmount(peopleAmount));
+    goToQueue(peopleAmount);
+    dispatch(change({ current: "playersSearching" }));
+  };
+  const goToQueue = (amount: number) => {
+    let info: EnterQueueInfo = {
+      quizId: selectedQuiz,
+      peopleAmount: amount,
+      competitiveType: CompetitiveType.Multi,
+      withGroup: false,
+    };
+    connection?.send("GoToQueue", info);
   };
   return (
     <BaseModal onClose={props.onClose}>

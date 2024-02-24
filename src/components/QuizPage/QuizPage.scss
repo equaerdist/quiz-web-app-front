@@ -16,8 +16,12 @@
     column-gap: 97px;
     grid-template-rows: auto;
     grid-auto-rows: auto;
+    align-items: center;
     justify-content: center;
     align-content: center;
+    .title_details {
+      text-align: center;
+    }
   }
   &__sort {
     display: flex;
@@ -86,4 +90,55 @@ input[type="range"]::-moz-range-thumb {
   height: 24px;
   border-radius: 100%;
   width: 24px;
+}
+@media (max-width: 1280px) {
+  .quiz {
+    &__parameters {
+      row-gap: 45px;
+      grid-template-columns: repeat(2, minmax(162px, auto));
+    }
+    &__raiting-progress {
+      align-items: center;
+    }
+  }
+}
+@media (max-width: 960px) {
+  .quiz {
+    &__cards {
+      gap: 30px;
+    }
+  }
+}
+@media (max-width: 780px) {
+  .quiz {
+    margin-top: 30px;
+    .switch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .icon {
+        cursor: pointer;
+        margin-bottom: 15px;
+      }
+    }
+    padding: 10px;
+    &__parameters {
+      gap: 45px;
+      transition: 0.3s all ease-in-out;
+      overflow-y: hidden;
+      grid-template-columns: repeat(auto-fit, auto);
+    }
+  }
+}
+@media (max-width: 526px) {
+  .quiz {
+    &__parameters {
+      grid-template-columns: auto;
+    }
+  }
+}
+@media (max-width: 340px) {
+  .quiz {
+    padding: 0px;
+  }
 }

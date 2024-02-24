@@ -2,7 +2,9 @@
   &__backdrop {
     box-shadow: 7px 7px 15px 0px var(--shadow_color);
     .wrapper {
+      z-index: 500;
       position: relative;
+      cursor: pointer;
     }
     right: 50px;
     bottom: 50px;

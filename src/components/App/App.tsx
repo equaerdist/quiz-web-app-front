@@ -18,7 +18,7 @@ import {
   fetchForAuthentificationCheck,
   fetchForGetUserData,
 } from "../../slices/auth/auth";
-import { setConnection } from "../../slices/global/global";
+import { setConnection, setMobile } from "../../slices/global/global";
 import { useEffect } from "react";
 import * as signalR from "@microsoft/signalr";
 import config from "../../wrappers/config";
@@ -28,7 +28,7 @@ import { MatchStartsInfo, Message } from "../../Dtos/quizGame";
 import { goTo } from "../../slices/transition/transition";
 import QuestionPage from "../QuestionPage/QuestionPage";
 import { change } from "../../slices/modal/modal";
-import MatchEnd from "../Modals/MatchEnd/MatchEnd";
+import { selectModal } from "../../wrappers/utils";
 function App() {
   return (
     <Provider store={store}>
@@ -48,6 +48,11 @@ function App() {
 const View = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const authentificated = useAppSelector((state) => state.auth.authentificated);
+
+  function handleResize(this: Window) {
+    dispatch(setMobile(this.innerWidth <= 780));
+  }
   const callTransition = (info: MatchStartsInfo) => {
     dispatch(goTo("start"));
     dispatch(change({ current: "" }));
@@ -58,22 +63,35 @@ const View = () => {
       );
     }, 2500);
   };
-  const authentificated = useAppSelector((state) => state.auth.authentificated);
+
   useEffect(() => {
     if (authentificated == true) dispatch(fetchForGetUserData());
   }, [authentificated]);
+
   useEffect(() => {
     dispatch(fetchForAuthentificationCheck());
+    window.addEventListener("resize", handleResize);
+    //#region signalR
     let connection = new signalR.HubConnectionBuilder()
       .withUrl(`${config.api}quizHub`)
+      .withAutomaticReconnect()
       .build();
-    connection.on("ReceiveMessage", function (message: Message) {});
+    connection.on("ReceiveMessage", function (message: Message) {
+      selectModal(dispatch, message, connection);
+    });
     connection.on("GameStarts", function (info: MatchStartsInfo) {
       callTransition(info);
     });
     connection.start();
+    connection.onreconnected(() => console.log("RECONNECT"));
     dispatch(setConnection(connection));
+    //#endregion
+    return () => {
+      connection.stop();
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
+
   return (
     <>
       <ModalManager></ModalManager>

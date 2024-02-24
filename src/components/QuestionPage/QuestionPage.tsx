@@ -40,7 +40,7 @@ const QuestionPage = () => {
         connection?.invoke("SendAnswerToUser").then((card) => {
           setCurrentQuiz(card as GetQuizCardDto);
         });
-      let progress = ((counter - 1) / amountOfQuestion) * 100;
+      let progress = Math.round(((counter - 1) / amountOfQuestion) * 100);
       setProgress(progress);
     }
   }, [counter]);
@@ -48,6 +48,12 @@ const QuestionPage = () => {
   const editAnswer = (type: boolean, id: string) => {
     if (type) setAnswers((answers) => [...answers, id]);
     else setAnswers((answers) => answers.filter((a) => a !== id));
+  };
+  const checkCorrect = (questionId: string) => {
+    if (answerResult == null) return null;
+    if (answerResult.rightAnswers.includes(questionId)) return true;
+    else if (answers.includes(questionId)) return false;
+    return null;
   };
   const onAnswer = () => {
     var checkAnswerInfo: CheckAnswerInfo = { answers };
@@ -69,6 +75,7 @@ const QuestionPage = () => {
         } else {
           setCounter((counter) => counter + 1);
           setAnswerResult(null);
+          setAnswers([]);
         }
       }, 2000);
     });
@@ -89,7 +96,7 @@ const QuestionPage = () => {
             <Question
               question={q}
               EditAnswer={editAnswer}
-              type={answerResult?.rightAnswers.includes(q.id)}
+              type={checkCorrect(q.id)}
             ></Question>
           ))}
         </div>
@@ -104,7 +111,7 @@ const QuestionPage = () => {
 const Question = (props: {
   question: GetQuestionDto;
   EditAnswer: Function;
-  type?: boolean;
+  type?: boolean | null;
 }) => {
   var className = `question__variant ${
     props.type

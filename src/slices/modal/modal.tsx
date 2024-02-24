@@ -4,6 +4,7 @@ import config from "../../wrappers/config";
 import { ProblemDetails } from "../../Dtos/Quiz";
 import { createQuizAsync, getErrorFromResponse } from "../quiz/quiz";
 import { fetchForUserEnter, fetchForUserRegistration } from "../auth/auth";
+import { ReactNode } from "react";
 
 type modalState = {
   current: string;
@@ -14,6 +15,7 @@ type modalState = {
   condition: string;
   progress: number | null;
   details: string;
+  buttons?: ReactNode[] | null;
 };
 const initialState: modalState = {
   current: "",
@@ -24,6 +26,7 @@ const initialState: modalState = {
   details: "Что-то пошло не так",
   condition: "error",
   progress: null,
+  buttons: null,
 };
 
 type changeData = {
@@ -31,6 +34,7 @@ type changeData = {
   sessionData?: string;
   backPath?: string;
   details?: string;
+  buttons?: ReactNode[];
 };
 
 const loadImageOnServerAsync = createAsyncThunk(
@@ -61,6 +65,7 @@ const slice = createSlice({
         state.transferData = action.payload.sessionData;
       if (action.payload.backPath) state.backPath = action.payload.backPath;
       if (action.payload.details) state.details = action.payload.details;
+      if (action.payload.buttons) state.buttons = action.payload.buttons;
     },
     setPlayersAmount: (state, action: PayloadAction<number>) => {
       state.playersAmount = action.payload;

@@ -2,12 +2,17 @@
   &__icon {
     width: 180px;
     height: 180px;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
     margin-inline: auto;
   }
   &__text {
     text-align: center;
     margin-top: 15px;
+  }
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
 }

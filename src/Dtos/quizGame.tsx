@@ -6,11 +6,26 @@ export enum MessageType {
 export enum NotifyType {
   Main,
   Submain,
+  GameQueue,
 }
 
 export enum AdditionActions {
   None,
   ResetGroupInfo,
+}
+
+export interface Button {
+  content: string;
+  transferInfo: any;
+  action: string | null;
+}
+
+export interface Message {
+  content: string;
+  type: MessageType;
+  notifyType: NotifyType;
+  additionActions: AdditionActions;
+  buttons: Button[] | null;
 }
 
 export interface GetQuizCardDto {
@@ -25,13 +40,6 @@ export interface GetQuestionDto {
   id: string;
   content: string;
   thumbnail: string;
-}
-
-export interface Message {
-  content: string;
-  type: MessageType;
-  notifyType: NotifyType;
-  additionActions: AdditionActions;
 }
 
 export interface MatchStartsInfo {
