@@ -34,11 +34,14 @@ const QuestionPage = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    console.log("fair");
     if (counter == 1 && !startInfo.current) startInfo.current = true;
     else {
+      console.log("fair");
       if (counter <= amountOfQuestion)
         connection?.invoke("SendAnswerToUser").then((card) => {
           setCurrentQuiz(card as GetQuizCardDto);
+          console.log(card);
         });
       let progress = Math.round(((counter - 1) / amountOfQuestion) * 100);
       setProgress(progress);

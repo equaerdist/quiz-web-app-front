@@ -8,9 +8,9 @@ const RegistrationEnd: FC<IRegistrationEndProps> = (props) => {
   return (
     <BaseModal onClose={props.onClose}>
       <Backdrop>
-        <div className="auth__requirements wrapper">
+        <div className="auth__requirements wrapper registration__end">
           <img src={checker} alt="Иконка" className="icon registration__icon" />
-          <span className="title_details registration__details">
+          <span className="title_details registration__details ">
             Все почти готово. Мы отправили письмо с подтверждением на вашу почту{" "}
             <span> Peterpark@example.com.</span>
           </span>

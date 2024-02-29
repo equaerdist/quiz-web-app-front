@@ -7,7 +7,10 @@ import * as yup from "yup";
 import FormikPersist from "../../FormikPersistence/FormikPersistence";
 import { UserDto } from "../../../../Dtos/Quiz";
 import { useAppDispatch } from "../../../../wrappers/store-hooks";
-import { fetchForUserEnter } from "../../../../slices/auth/auth";
+import {
+  fetchForGetUserData,
+  fetchForUserEnter,
+} from "../../../../slices/auth/auth";
 type enterFormValues = {
   enter_login: string;
   enter_password: string;
@@ -33,7 +36,9 @@ const EnterForm = () => {
           login: values.enter_login,
           password: values.enter_password,
         };
-        return dispatch(fetchForUserEnter(userDto));
+        return dispatch(fetchForUserEnter(userDto)).then(() =>
+          dispatch(fetchForGetUserData())
+        );
       }}
       validationSchema={schema}
     >

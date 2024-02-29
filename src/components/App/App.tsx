@@ -15,20 +15,20 @@ import ModalManager from "../ModalManager/ModalManager";
 import TransitionManager from "../Transitions/TransitionManager";
 import UserArea from "../UserArea/UserArea";
 import {
-  fetchForAuthentificationCheck,
   fetchForGetUserData,
+  fetchForRefreshToken,
 } from "../../slices/auth/auth";
 import { setConnection, setMobile } from "../../slices/global/global";
 import { useEffect } from "react";
 import * as signalR from "@microsoft/signalr";
 import config from "../../wrappers/config";
-import { useAppDispatch, useAppSelector } from "../../wrappers/store-hooks";
+import { useAppDispatch } from "../../wrappers/store-hooks";
 
 import { MatchStartsInfo, Message } from "../../Dtos/quizGame";
 import { goTo } from "../../slices/transition/transition";
 import QuestionPage from "../QuestionPage/QuestionPage";
 import { change } from "../../slices/modal/modal";
-import { selectModal } from "../../wrappers/utils";
+import { TokenProvider, selectModal } from "../../wrappers/utils";
 function App() {
   return (
     <Provider store={store}>
@@ -48,7 +48,6 @@ function App() {
 const View = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const authentificated = useAppSelector((state) => state.auth.authentificated);
 
   function handleResize(this: Window) {
     dispatch(setMobile(this.innerWidth <= 780));
@@ -65,15 +64,14 @@ const View = () => {
   };
 
   useEffect(() => {
-    if (authentificated == true) dispatch(fetchForGetUserData());
-  }, [authentificated]);
-
-  useEffect(() => {
-    dispatch(fetchForAuthentificationCheck());
     window.addEventListener("resize", handleResize);
+    dispatch(fetchForGetUserData());
     //#region signalR
     let connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${config.api}quizHub`)
+      .withUrl(`${config.api}quizHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
     connection.on("ReceiveMessage", function (message: Message) {
@@ -85,6 +83,18 @@ const View = () => {
     connection.start();
     connection.onreconnected(() => console.log("RECONNECT"));
     dispatch(setConnection(connection));
+    setInterval(() => {
+      let exprTime = TokenProvider.GetExpirationTime();
+      if (exprTime !== null) {
+        if (
+          new Date(exprTime).getTime() - new Date().getTime() <
+          config.updateTimeInMillis
+        )
+          dispatch(fetchForRefreshToken());
+      }
+      if (connection.state != signalR.HubConnectionState.Connected)
+        connection.start();
+    }, 60 * 1000);
     //#endregion
     return () => {
       connection.stop();

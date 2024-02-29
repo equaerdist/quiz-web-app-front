@@ -4,8 +4,15 @@
     text-align: center;
   }
   &__buttons {
+    align-items: stretch;
     margin-top: 58px;
     display: flex;
+    justify-content: center;
+    column-gap: 15px;
+    row-gap: 15px;
+    .button {
+      margin-inline: auto;
+    }
     flex-wrap: wrap;
     margin-inline: auto;
     &_players {
@@ -39,12 +46,6 @@
           background-color: var(--secondary_color);
         }
       }
-    }
-  }
-  &__button {
-    margin-left: 32px;
-    &:nth-child(1) {
-      margin-left: 0;
     }
   }
 }

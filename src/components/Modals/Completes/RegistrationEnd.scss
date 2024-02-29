@@ -15,3 +15,17 @@
 .auth__requirements.wrapper {
   margin-top: 0px;
 }
+.auth__requirements.wrapper.registration__end {
+  .icon {
+    margin-inline: auto;
+  }
+  span {
+    text-align: center;
+    margin-inline: auto;
+  }
+  row-gap: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

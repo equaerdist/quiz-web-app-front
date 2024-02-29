@@ -18,7 +18,7 @@ type modalState = {
   buttons?: ReactNode[] | null;
 };
 const initialState: modalState = {
-  current: "playersSearching",
+  current: "",
   mode: "single",
   playersAmount: 2,
   transferData: "Ошибка",

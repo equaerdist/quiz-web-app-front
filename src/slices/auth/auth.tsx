@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { GetUserDto, ProblemDetails, UserDto } from "../../Dtos/Quiz";
+import { AuthData, GetUserDto, ProblemDetails, UserDto } from "../../Dtos/Quiz";
 import axios, { AxiosError } from "axios";
 import config from "../../wrappers/config";
 import { getErrorFromResponse } from "../quiz/quiz";
 import { transformGetUserDto } from "../../wrappers/dataTransform";
+import { TokenProvider } from "../../wrappers/utils";
 type authState = {
   authentificated: boolean;
   currentUser: GetUserDto | null;
@@ -36,9 +37,8 @@ export const fetchForUserEnter = createAsyncThunk(
   "auth/userEnter",
   async (info: UserDto, thunkApi) => {
     try {
-      const response = await axios.post(`${config.api}auth/token`, info, {
+      const response = await axios.post(`${config.api}auth`, info, {
         headers: { "Content-Type": "application/json" },
-        withCredentials: true,
       });
       return response.data;
     } catch (error) {
@@ -49,18 +49,16 @@ export const fetchForUserEnter = createAsyncThunk(
   }
 );
 
-export const fetchForAuthentificationCheck = createAsyncThunk(
-  "auth/checkAuthentification",
-  async (arg: void, { rejectWithValue }) => {
+export const fetchForRefreshToken = createAsyncThunk(
+  "auth/refreshToken",
+  async (arg: void, thunkApi) => {
     try {
-      const response = await axios.get(`${config.api}auth/check`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(`${config.api}refreshToken`);
       return response.data;
     } catch (error) {
       let axiosError = error as AxiosError;
-      if (!axiosError.status) throw error;
-      return rejectWithValue(axiosError.status);
+      if (!axiosError.response) throw Error;
+      return thunkApi.rejectWithValue(axiosError.response.data);
     }
   }
 );
@@ -69,9 +67,7 @@ export const fetchForGetUserData = createAsyncThunk(
   "auth/getUserData",
   async (arg: void, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${config.api}user`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(`${config.api}user`);
       return transformGetUserDto(response.data);
     } catch (error) {
       let axiosError = error as AxiosError;
@@ -94,27 +90,16 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchForAuthentificationCheck.pending, (state) => {
-        state.condition = "loading";
-      })
-      .addCase(fetchForAuthentificationCheck.fulfilled, (state) => {
-        state.authentificated = true;
-        state.condition = "idle";
-      })
-      .addCase(fetchForAuthentificationCheck.rejected, (state, action) => {
-        state.authentificated = false;
-        state.condition = "idle";
-        if (!action.meta.rejectedWithValue)
-          state.condition = action.error.message ?? "Произошла ошибка";
-      })
       .addCase(fetchForGetUserData.pending, (state) => {
         state.condition = "loading";
       })
       .addCase(fetchForGetUserData.fulfilled, (state, action) => {
         state.currentUser = action.payload;
         state.condition = "idle";
+        state.authentificated = true;
       })
       .addCase(fetchForGetUserData.rejected, (state, action) => {
+        state.authentificated = false;
         if (action.meta.rejectedWithValue) {
           let responseError = action.payload as ProblemDetails;
           state.condition = getErrorFromResponse(responseError);
@@ -123,8 +108,28 @@ const slice = createSlice({
           else if (action.error.message) state.condition = action.error.message;
         }
       })
-      .addCase(fetchForUserEnter.fulfilled, (state) => {
+      .addCase(fetchForUserEnter.fulfilled, (state, action) => {
         state.authentificated = true;
+        let payload = action.payload as AuthData;
+        TokenProvider.SetToken(payload.token);
+        TokenProvider.SetRefreshToken(payload.refreshToken);
+        TokenProvider.SetExpirationTime(payload.expires);
+      })
+      .addCase(fetchForRefreshToken.pending, (state) => {
+        state.condition = "idle";
+      })
+      .addCase(fetchForRefreshToken.fulfilled, (state, action) => {
+        state.condition = "idle";
+        let payload = action.payload as AuthData;
+        TokenProvider.SetExpirationTime(payload.expires);
+        TokenProvider.SetToken(payload.token);
+      })
+      .addCase(fetchForRefreshToken.rejected, (state, action) => {
+        if (action.meta.rejectedWithValue) {
+          var payload = action.payload as ProblemDetails;
+          state.condition = payload.title;
+          TokenProvider.ResetTokens();
+        } else state.condition = "Сервер не доступен";
       })
       .addDefaultCase(() => {});
   },

@@ -1,3 +1,5 @@
+//#region QuizDto
+
 export interface CreateQuizDto {
   name: string;
   mode: number;
@@ -27,7 +29,8 @@ export interface GetQuizDto {
   completed: number;
   raiting: number;
 }
-
+//#endregion
+//#region user and authentification
 export interface UserDto {
   login: string;
   password: string;
@@ -55,3 +58,9 @@ export enum UserType {
   Default = 0,
   Premium = 1,
 }
+export interface AuthData {
+  refreshToken: string | null;
+  token: string;
+  expires: string;
+}
+//#endregion

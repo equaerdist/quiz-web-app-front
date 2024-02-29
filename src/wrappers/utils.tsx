@@ -2,6 +2,7 @@ import { AppDispatch } from "../store";
 import { change, setCondition } from "../slices/modal/modal";
 import { Message, MessageType, NotifyType } from "../Dtos/quizGame";
 import { HubConnection } from "@microsoft/signalr";
+import config from "./config";
 export const selectModal = (
   dispatch: AppDispatch,
   message: Message,
@@ -43,3 +44,29 @@ export const disableScrolling = (type: boolean) => {
   let app = document.querySelector(".app__main") as HTMLDivElement;
   if (app) app.style.overflowY = style;
 };
+
+export class TokenProvider {
+  public static GetToken(): string | null {
+    return localStorage.getItem(config.AuthorizationAlias);
+  }
+  public static GetRefreshToken(): string | null {
+    return localStorage.getItem(config.RefreshAlias);
+  }
+  public static SetRefreshToken(rereshToken: string) {
+    localStorage.setItem(config.RefreshAlias, rereshToken);
+  }
+  public static SetToken(token: string) {
+    localStorage.setItem(config.AuthorizationAlias, token);
+  }
+  public static SetExpirationTime(dateTime: string) {
+    localStorage.setItem(config.tokenExpirationTime, dateTime);
+  }
+  public static GetExpirationTime() {
+    return localStorage.getItem(config.tokenExpirationTime);
+  }
+  public static ResetTokens() {
+    localStorage.removeItem(config.RefreshAlias);
+    localStorage.removeItem(config.AuthorizationAlias);
+    localStorage.removeItem(config.tokenExpirationTime);
+  }
+}
